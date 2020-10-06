@@ -42,8 +42,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function comments()
+    public function user_name()
     {
-        return $this->hasMany('App\Models\Comment','commentor', 'id');
+        return $this->hasOne('App\Models\UserNameAssignment','user_id','id')
+                    ->join('user_names','user_name_assignments.user_name_id','user_names.id')
+                    ->select('user_names.user_name as data');
     }
 }

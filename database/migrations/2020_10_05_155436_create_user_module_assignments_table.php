@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class BlogsTable extends Migration
+class CreateUserModuleAssignmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class BlogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('blogs', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('subject');
-            $table->text('body');
-            $table->string('user');
+        Schema::create('user_module_assignments', function (Blueprint $table) {
+            $table->id();
+            $table->string('user_id');
+            $table->string('module_id');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class BlogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blogs');
+        Schema::dropIfExists('user_module_assignments');
     }
 }

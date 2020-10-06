@@ -1,0 +1,28 @@
+{
+    "company":{
+            "company_logo":"",
+            "company_name": "", 
+            "nature_of_business": "",
+            "address1": "", 
+            "address2": "", 
+            "zip_code": "", 
+            "rdo": "", 
+            "email": "", 
+            "phone": "", 
+            "fax": "", 
+            "tin_no": "", 
+            "sss_no": "", 
+            "hdmf_no":"", 
+            "working_hours":"", 
+            "working_hours_schedule_type": "1", 
+            "no_of_shifts": "0",
+            "updated_by": ""
+    },
+    "super_admin":[
+            1,
+            2,
+            3,
+            4,
+            5
+    ]
+}

@@ -3,8 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\BlogController;
-use App\Http\Controllers\API\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,17 +15,7 @@ use App\Http\Controllers\API\CommentController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::post('/login',[UserController::class, 'login']);
 Route::post('/register',[UserController::class, 'register']);
-Route::resource('/blogs', BlogController::class)->only([
-    'index', 'store', 'show', 'update', 'destroy'
-]);
-Route::resource('/comments', CommentController::class)->only([
-    'store', 'update', 'destroy'
-]);
+Route::post('/login',[UserController::class, 'login']);
 
 
