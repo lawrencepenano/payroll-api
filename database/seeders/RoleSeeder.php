@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use DB;
 use Illuminate\Database\Seeder;
+use DB;
 
 class RoleSeeder extends Seeder
 {
@@ -14,12 +14,6 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('roles')->insert([
-            "name"=>"super_admin",
-            "name"=> "admin",
-            "name"=>"enployee",
-        ]);
-
         DB::table('roles')->delete();
 
         $roles = [
@@ -29,6 +23,5 @@ class RoleSeeder extends Seeder
         ];
 
         DB::table('roles')->insert($roles);
-
     }
 }

@@ -18,8 +18,8 @@ class CreateCompaniesTable extends Migration
             $table->text('company_logo');
             $table->string('company_name');
             $table->string('nature_of_business');
-            $table->string('address1');
-            $table->string('address2');
+            $table->string('address_1');
+            $table->string('address_2');
             $table->string('zip_code');
             $table->string('rdo');
             $table->string('email');
