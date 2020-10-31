@@ -27,16 +27,15 @@ class CostCenterController extends Controller
         /* To get the company of the current user*/
         $id = $request->user()->id;
         $user  = User::find($id);
-        $company = $user->company;
+        $company_id = $user->company->id;
 
         $cost_center = CostCenter::
         when(!empty($search), function ($q) use ($search) {
             return $q->orWhere('code', 'LIKE', '%' . $search . '%')
-                     ->orWhere('description', 'LIKE', '%' . $search . '%')
-                     ->orWhere('remarks', 'LIKE', '%' . $search . '%');
+                     ->orWhere('description', 'LIKE', '%' . $search . '%');
         })
         /* To get the Company of Current User */
-        ->where('company_id',$company->id)
+        ->where('company_id',$company_id)
          /* Sorting */
          ->when($request->query('sortField') &&  $request->query('sortOrder'), function ($q) use ($request) {
             return $q->orderBy($request->query('sortField'), $request->query('sortOrder'));
@@ -78,23 +77,22 @@ class CostCenterController extends Controller
         /* To get the company of the current user*/
         $id = $request->user()->id;
         $user  = User::find($id);
-        $company = $user->company;
+        $company_id = $user->company->id;
 
          /* Validate duplicate code */
-         if (CostCenter::where('code', $details['code'])->where('company_id',$company->id)->first()) {
+         if (CostCenter::where('code', $details['code'])->where('company_id',$company_id)->first()) {
             return Response::json(['status' => 'error', 'data' => ['Code is already used.']], 400);
         }
 
         /* Create a Cost Center */
         $cost_center = new CostCenter;
-        $cost_center->company_id = $company->id;
+        $cost_center->company_id = $company_id;
         $cost_center->code = $details['code'];
         $cost_center->description = $details['description'];
         $cost_center->remarks = $details['remarks'];
         $cost_center->save();
         
-        $response = $cost_center;
-        return Response::json(['status' => 'Success', 'data' => $response], 200);
+        return Response::json(['status' => 'Success', 'data' => $cost_center], 200);
     }
 
     /**
@@ -108,7 +106,7 @@ class CostCenterController extends Controller
         /* To get the company of the current user*/
         $user_id = $request->user()->id;
         $user  = User::find($user_id);
-        $company = $user->company;
+        $company_id = $user->company;
 
          /* Get Cost Center */
          $cost_center  = CostCenter::find($id);
@@ -119,7 +117,7 @@ class CostCenterController extends Controller
          }
 
          /* Check if company is same */
-         if(!$cost_center->company->id == $company->id){
+         if(!$cost_center->company->id == $company_id){
             return Response::json(['status' => 'fail', 'data' => ["This Cost Center belongs to another Company"] ], 403);
          }
 

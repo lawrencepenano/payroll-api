@@ -6,6 +6,7 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\CompanyController;
 use App\Http\Controllers\API\GlobalParameterController;
 use App\Http\Controllers\API\CostCenterController;
+use App\Http\Controllers\API\DepartmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,7 +45,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 /* Company */
-
 Route::middleware(['auth:sanctum'])->group(function () {
     /* Company Routes */
     Route::resource('/company', CompanyController::class)->only([
@@ -57,10 +57,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
 /* Cost Centers */
-
 Route::middleware(['auth:sanctum'])->group(function () {
     /* Cost Center Routes */
     Route::resource('/cost_center', CostCenterController::class)->only([
+        'index', 'store', 'show', 'update' , 'destroy'
+    ]);
+});
+
+/* Departments */
+Route::middleware(['auth:sanctum'])->group(function () {
+    /* Department Routes */
+    Route::resource('/department', DepartmentController::class)->only([
         'index', 'store', 'show', 'update' , 'destroy'
     ]);
 });

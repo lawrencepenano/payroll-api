@@ -28,6 +28,11 @@ class Company extends Model
         return $this->hasMany('App\Models\CostCenter','company_id','id');
     }
 
+    public function deparments()
+    {
+        return $this->hasMany('App\Models\Department','department_id','id');
+    }
+
     public function audit()
     {
         return $this->hasMany('App\Models\CompanyAuditTrail','company_id','id');
