@@ -32,7 +32,7 @@ class UserController extends Controller
                     ->orWhere('user_names.user_name',$email)
                     ->select('users.*')
                     ->first();
-                    
+
             /* Check if exists and same password */
             if (!$user || !Hash::check($password, $user->password)) {
                 return Response::json(['status' => 'fail', 'data' => ['These credentials do not match our records.'] ], 419);
@@ -111,8 +111,8 @@ class UserController extends Controller
         $company->company_logo = $company_defaults->company_logo;
         $company->company_name = $details['company_name'];
         $company->nature_of_business = $company_defaults->nature_of_business;
-        $company->address1 = $company_defaults->address1;
-        $company->address2 = $company_defaults->address2;
+        $company->address_1 = $company_defaults->address_1;
+        $company->address_2 = $company_defaults->address_2;
         $company->rdo = $company_defaults->rdo;
         $company->zip_code = $company_defaults->zip_code;
         $company->email =  $details['email'];
@@ -202,7 +202,13 @@ class UserController extends Controller
 
     function index(Request $request)
     {
+        /* To Get Searrch Text */
         $search = $request->query('q');
+
+        /* To Get Current User */
+        $id = $request->user()->currentAccessToken()->tokenable_id;
+        $current_user  = User::find($id);
+        $company = $current_user->company;
 
         $users = User::
         when(!empty($search), function ($q) use ($search) {
@@ -217,9 +223,11 @@ class UserController extends Controller
         ->join('roles', 'pvot2.role_id', 'roles.id')
         ->join('user_access_status_assignments as pvot3', 'users.id', 'pvot3.user_id')
         ->join('access_statuses', 'pvot3.status_id', 'access_statuses.id')
+        ->join('user_company_assignments as pvot4','pvot4.user_id','users.id')
         ->select('users.*', 'user_names.user_name', 'roles.name as role', 'access_statuses.status', 'access_statuses.id as status_id' , 'pvot3.status_id')
-         /* Sorting */
-         ->when($request->query('sortField') &&  $request->query('sortOrder'), function ($q) use ($request) {
+        ->where('pvot4.company_id',$company->id)
+        /* Sorting */
+        ->when($request->query('sortField') &&  $request->query('sortOrder'), function ($q) use ($request) {
             return $q->orderBy($request->query('sortField'), $request->query('sortOrder'));
         })
         /* Pagination */

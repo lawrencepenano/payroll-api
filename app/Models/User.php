@@ -73,7 +73,7 @@ class User extends Authenticatable
     public function access_status()
     {
         return $this->hasOne('App\Models\UserAccessStatusAssignment','user_id','id')
-                    ->join('modules','user_module_assignments.module_id','modules.id')
-                    ->select('modules.name');
+            ->join('access_statuses','user_access_status_assignments.status_id','access_statuses.id')
+            ->select('access_statuses.id as value', 'access_statuses.status as label');
     }
 }

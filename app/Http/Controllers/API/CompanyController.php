@@ -28,14 +28,14 @@ class CompanyController extends Controller
         $id = $request->user()->currentAccessToken()->tokenable_id;
 
         $user  = User::find($id);
-        $company_id = $user->company;
+        $company = $user->company;
 
         $company = Company::
         when(!empty($search), function ($q) use ($search) {
             return $q->where('company_name', 'LIKE', '%' . $search . '%');
         })
         /* To get the Company of Current User */
-        ->where('id',$company_id->id)
+        ->where('id',$company->id)
          /* Sorting */
          ->when($request->query('sortField') &&  $request->query('sortOrder'), function ($q) use ($request) {
             return $q->orderBy($request->query('sortField'), $request->query('sortOrder'));
@@ -82,6 +82,11 @@ class CompanyController extends Controller
              return Response::json(['status' => 'fail', 'data' => "User is not existing" ], 419);
          }
         
+         /* Get Company Logo URL*/
+        //  $company->company_logo = $company->company_logo ? Storage::url($company->company_logo) : null;
+
+            // $exists = Storage::disk('local')->url($company->company_logo);
+         $company->company_logo = asset(Storage::disk('public')->url($company->company_logo));
          /* Get Access Status */
          $company->access_status;
 
@@ -110,6 +115,10 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
+        /* To select the current users cpmpany */
+        $company = Company::find($id);
+
+        /* get parameter values */
         $params = $request->post();
 
         // do image upload
@@ -117,8 +126,10 @@ class CompanyController extends Controller
             $file = $request->file('company_logo');
             $name = time() . $file->getClientOriginalName();
             $filePath = 'company_logo/' . $name;
-            Storage::disk('local')->put($filePath, file_get_contents($file));
+            Storage::disk('public')->put($filePath, file_get_contents($file));
             $params['company_logo'] = $filePath;
+        }else{
+            $params['company_logo'] = $company->company_logo;
         }
 
          /* Validattion of field */
@@ -128,12 +139,10 @@ class CompanyController extends Controller
             'email' => 'required',
             'phone' => 'required',
         ]);
+
         if ($validator->fails()) {
             return Response::json(['status' => 'error', 'data' => [$validator->errors()]], 400);
         }
-
-        /* To select the current users cpmpany */
-        $company = Company::find($id);
         
         /* Get Updater */
         $updated_by = $request->user()->currentAccessToken()->tokenable_id;
@@ -160,17 +169,36 @@ class CompanyController extends Controller
         $company_audit_trail->updated_by = $updated_by;
         $company_audit_trail->action = "update";
         $company_audit_trail->date_and_time = Carbon::now();
-        /* removing time stams before savong */
+        /* removing time stamps before saving */
         $company_audit_trail->timestamps = false;
         $company_audit_trail->save();
  
+        /* Set ID to $oarams in order to attach to its setup */
+        $params['id'] = $id;
         /* set updated_by */
         $params['updated_by'] = $updated_by;
-
         /* update current record in the main table */
-        $company->update($params);
 
-        return Response::json(['status' => 'success', 'data' => $params], 200);
+        $company->company_logo = $params['company_logo'];
+        $company->company_name = $params['company_name'];
+        $company->nature_of_business = $params['nature_of_business'];
+        $company->address_1 = $params['address_1'];
+        $company->address_2 = $params['address_2']?$params['address_2']:"";
+        $company->zip_code = $params['zip_code']?$params['zip_code']:"";
+        $company->rdo = $params['rdo']?$params['rdo']:"";
+        $company->email = $params['email'];
+        $company->phone = $params['phone'];
+        $company->fax =  $params['fax']?$params['fax']:"";
+        $company->tin_no = $params['tin_no']?$params['tin_no']:"";
+        $company->sss_no = $params['sss_no']?$params['sss_no']:"";
+        $company->hdmf_no = $params['hdmf_no']?$params['hdmf_no']:" ";
+        $company->working_hours = $params['working_hours']?$params['working_hours']:"";
+        $company->working_hours_schedule_type =  $params['working_hours_schedule_type']?$params['working_hours_schedule_type']:"";
+        $company->no_of_shifts =  $params['no_of_shifts']?$params['no_of_shifts']:"";
+        $company->updated_by = $params['updated_by']?$params['updated_by']:"";
+        $company->save();
+
+        return Response::json(['status' => 'success', 'data' => $company], 200);
     }
 
     /**
