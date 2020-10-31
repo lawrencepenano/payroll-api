@@ -7,6 +7,7 @@ use App\Http\Controllers\API\CompanyController;
 use App\Http\Controllers\API\GlobalParameterController;
 use App\Http\Controllers\API\CostCenterController;
 use App\Http\Controllers\API\DepartmentController;
+use App\Http\Controllers\API\PayGroupController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +69,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     /* Department Routes */
     Route::resource('/department', DepartmentController::class)->only([
+        'index', 'store', 'show', 'update' , 'destroy'
+    ]);
+});
+
+/* Pay Groups */
+Route::middleware(['auth:sanctum'])->group(function () {
+    /* Pay Group Routes */
+    Route::resource('/pay_group', PayGroupController::class)->only([
         'index', 'store', 'show', 'update' , 'destroy'
     ]);
 });
