@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\CompanyController;
 use App\Http\Controllers\API\GlobalParameterController;
+use App\Http\Controllers\API\CostCenterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,4 +53,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     /* To cater the Form Data */
     Route::post('/company/{id}',[CompanyController::class, 'update']);
+});
+
+
+/* Cost Centers */
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    /* Cost Center Routes */
+    Route::resource('/cost_center', CostCenterController::class)->only([
+        'index', 'store', 'show', 'update' , 'destroy'
+    ]);
 });

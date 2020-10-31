@@ -15,6 +15,7 @@ class CreateCompanyAuditTrailsTable extends Migration
     {
         Schema::create('company_audit_trails', function (Blueprint $table) {
             $table->id();
+            $table->string('company_id');
             $table->text('company_logo');
             $table->string('company_name');
             $table->string('nature_of_business');

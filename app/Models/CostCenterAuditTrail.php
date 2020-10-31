@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CompanyAuditTrail extends Model
+class CostCenterAuditTrail extends Model
 {
     use HasFactory;
 
-    public function company()
+    public function audit()
     {
-        return $this->belongsTo('App\Models\Company','id','company_id');
+        return $this->belongsTo('App\Models\CostCenter','cost_center_id','id');
     }
-
 }

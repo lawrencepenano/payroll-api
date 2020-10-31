@@ -23,4 +23,14 @@ class Company extends Model
                     ->select('access_statuses.id as value', 'access_statuses.status as label');
     }
 
+    public function cost_centers()
+    {
+        return $this->hasMany('App\Models\CostCenter','company_id','id');
+    }
+
+    public function audit()
+    {
+        return $this->hasMany('App\Models\CompanyAuditTrail','company_id','id');
+    }
+
 }

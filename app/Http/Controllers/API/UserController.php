@@ -73,6 +73,7 @@ class UserController extends Controller
 
     function register(Request $request)
     {
+        /* Get Request Details */
         $details = $request->post();
 
         /* Validattion of field */
@@ -206,7 +207,7 @@ class UserController extends Controller
         $search = $request->query('q');
 
         /* To Get Current User */
-        $id = $request->user()->currentAccessToken()->tokenable_id;
+        $id = $request->user()->id;
         $current_user  = User::find($id);
         $company = $current_user->company;
 
@@ -264,8 +265,7 @@ class UserController extends Controller
 
     function auth(Request $request){
 
-        $id = $request->user()->currentAccessToken()->tokenable_id;
-
+        $id = $request->user()->id;
         $user  = User::find($id);
 
         if(!isset($user)){

@@ -25,8 +25,7 @@ class CompanyController extends Controller
     {
         $search = $request->query('q');
 
-        $id = $request->user()->currentAccessToken()->tokenable_id;
-
+        $id = $request->user()->id;
         $user  = User::find($id);
         $company = $user->company;
 
@@ -79,14 +78,12 @@ class CompanyController extends Controller
          $company  = Company::find($id);
 
          if(!isset($company)){
-             return Response::json(['status' => 'fail', 'data' => "User is not existing" ], 419);
+             return Response::json(['status' => 'fail', 'data' => "Company is not existing" ], 419);
          }
         
          /* Get Company Logo URL*/
-        //  $company->company_logo = $company->company_logo ? Storage::url($company->company_logo) : null;
-
-            // $exists = Storage::disk('local')->url($company->company_logo);
          $company->company_logo = asset(Storage::disk('public')->url($company->company_logo));
+         
          /* Get Access Status */
          $company->access_status;
 
@@ -145,10 +142,11 @@ class CompanyController extends Controller
         }
         
         /* Get Updater */
-        $updated_by = $request->user()->currentAccessToken()->tokenable_id;
+        $updated_by = $request->user()->id;
 
         /* Save Audit Trails */
         $company_audit_trail = new CompanyAuditTrail;
+        $company_audit_trail->company_id = $company->id;
         $company_audit_trail->company_logo = $company->company_logo;
         $company_audit_trail->company_name = $company->company_name;
         $company_audit_trail->nature_of_business = $company->nature_of_business;
