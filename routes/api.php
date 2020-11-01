@@ -8,6 +8,8 @@ use App\Http\Controllers\API\GlobalParameterController;
 use App\Http\Controllers\API\CostCenterController;
 use App\Http\Controllers\API\DepartmentController;
 use App\Http\Controllers\API\PayGroupController;
+use App\Http\Controllers\API\TotalWorkDaysPerYearController;
+use App\Http\Controllers\API\TotalWorkMonthsPerYearController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,6 +79,22 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     /* Pay Group Routes */
     Route::resource('/pay_group', PayGroupController::class)->only([
+        'index', 'store', 'show', 'update' , 'destroy'
+    ]);
+});
+
+/* Total Work Days Per Year */
+Route::middleware(['auth:sanctum'])->group(function () {
+    /* Total Work Months Per Yea Routes */
+    Route::resource('/total_work_days_per_year', TotalWorkDaysPerYearController::class)->only([
+        'index', 'store', 'show', 'update' , 'destroy'
+    ]);
+});
+
+/* Total Work Months Per Year */
+Route::middleware(['auth:sanctum'])->group(function () {
+    /* Total Work Months Per YeaRoutes */
+    Route::resource('/total_work_months_per_year', TotalWorkMonthsPerYearController::class)->only([
         'index', 'store', 'show', 'update' , 'destroy'
     ]);
 });

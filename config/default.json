@@ -24,5 +24,19 @@
             3,
             4,
             5
+    ],
+    "total_work_days_per_year":[
+        {"code": "258", "description":"258","remarks":"258"},
+        {"code": "261", "description":"261","remarks":"261"},
+        {"code": "313", "description":"313","remarks":"313"},
+        {"code": "314", "description":"314","remarks":"314"},
+        {"code": "365", "description":"365","remarks":"365"},
+        {"code": "393.5", "description":"393.5","remarks":"393.5"}
+    ],
+    "total_work_months_per_year":[
+        {"code": "12", "description":"12","remarks":"12"},
+        {"code": "13", "description":"13","remarks":"13"},
+        {"code": "14", "description":"14","remarks":"14"},
+        {"code": "15", "description":"15","remarks":"15"}
     ]
 }

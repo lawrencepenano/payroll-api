@@ -84,14 +84,27 @@ class CostCenterController extends Controller
             return Response::json(['status' => 'error', 'data' => ['Code is already used.']], 400);
         }
 
-        /* Create a Cost Center */
+        /* Store Record */
         $cost_center = new CostCenter;
         $cost_center->company_id = $company_id;
         $cost_center->code = $details['code'];
         $cost_center->description = $details['description'];
         $cost_center->remarks = $details['remarks'];
         $cost_center->save();
-        
+
+        /* Store Record Audit Trail*/
+        $cost_center_audit_trail = new CostCenterAuditTrail;
+        $cost_center_audit_trail->cost_center_id = $cost_center->id;
+        $cost_center_audit_trail->code = $cost_center->code;
+        $cost_center_audit_trail->description = $cost_center->description;
+        $cost_center_audit_trail->remarks = $cost_center->remarks;
+        $cost_center_audit_trail->updated_by = $user->id;
+        $cost_center_audit_trail->action = 'create';
+        $cost_center_audit_trail->date_and_time = Carbon::now();
+        /* disable time stamps */
+        $cost_center_audit_trail->timestamps = false;
+        $cost_center_audit_trail->save();
+
         return Response::json(['status' => 'Success', 'data' => $cost_center], 200);
     }
 
@@ -108,17 +121,17 @@ class CostCenterController extends Controller
         $user  = User::find($user_id);
         $company_id = $user->company;
 
-         /* Get Cost Center */
+         /* Get Record */
          $cost_center  = CostCenter::find($id);
 
          /* Check if Existing */
          if(!$cost_center){
-             return Response::json(['status' => 'fail', 'data' => ["Cost Center is not existing"] ], 404);
+             return Response::json(['status' => 'fail', 'data' => ["Record is not existing"] ], 404);
          }
 
          /* Check if company is same */
          if(!$cost_center->company->id == $company_id){
-            return Response::json(['status' => 'fail', 'data' => ["This Cost Center belongs to another Company"] ], 403);
+            return Response::json(['status' => 'fail', 'data' => ["This Record belongs to another Company"] ], 403);
          }
 
          $cost_center->audit;

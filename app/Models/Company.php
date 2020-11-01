@@ -30,7 +30,17 @@ class Company extends Model
 
     public function deparments()
     {
-        return $this->hasMany('App\Models\Department','department_id','id');
+        return $this->hasMany('App\Models\Department','company_id','id');
+    }
+
+    public function total_work_days_per_year()
+    {
+        return $this->hasMany('App\Models\TotalWorkDaysPerYear','company_id','id');
+    }
+
+    public function total_work_months_per_year()
+    {
+        return $this->hasMany('App\Models\TotalWorkMonthsPerYear','company_id','id');
     }
 
     public function audit()

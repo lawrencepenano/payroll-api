@@ -90,6 +90,19 @@ class PayGroupController extends Controller
         $pay_group->description = $details['description'];
         $pay_group->remarks = $details['remarks'];
         $pay_group->save();
+
+        /* Store Record Audit Trail*/
+        $pay_group_audit_trail = new PayGroupAuditTrail;
+        $pay_group_audit_trail->pay_group_id = $pay_group->id;
+        $pay_group_audit_trail->code = $pay_group->code;
+        $pay_group_audit_trail->description = $pay_group->description;
+        $pay_group_audit_trail->remarks = $pay_group->remarks;
+        $pay_group_audit_trail->updated_by = $user->id;
+        $pay_group_audit_trail->action = 'create';
+        $pay_group_audit_trail->date_and_time = Carbon::now();
+        /* disable time stamps */
+        $pay_group_audit_trail->timestamps = false;
+        $pay_group_audit_trail->save();
         
         return Response::json(['status' => 'Success', 'data' => $pay_group], 200);
     }
@@ -112,12 +125,12 @@ class PayGroupController extends Controller
 
          /* Check if Existing */
          if(!$pay_group){
-             return Response::json(['status' => 'fail', 'data' => ["Pay Group is not existing"] ], 404);
+             return Response::json(['status' => 'fail', 'data' => ["Record is not existing"] ], 404);
          }
 
          /* Check if company is same */
          if(!$pay_group->company->id == $company_id){
-            return Response::json(['status' => 'fail', 'data' => ["This Pay Group belongs to another Company"] ], 403);
+            return Response::json(['status' => 'fail', 'data' => ["This Record belongs to another Company"] ], 403);
          }
 
          $pay_group->audit;

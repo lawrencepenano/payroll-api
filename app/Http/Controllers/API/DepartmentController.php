@@ -85,13 +85,26 @@ class DepartmentController extends Controller
              return Response::json(['status' => 'error', 'data' => ['Code is already used.']], 400);
          }
  
-         /* Create a Department */
+         /* Store Record */
          $department = new Department;
          $department->company_id = $company_id;
          $department->code = $details['code'];
          $department->description = $details['description'];
          $department->remarks = $details['remarks'];
          $department->save();
+
+        /* Store Record Audit Trail*/
+        $department_audit_trail = new DepartmentAuditTrail;
+        $department_audit_trail->department_id = $department->id;
+        $department_audit_trail->code = $department->code;
+        $department_audit_trail->description = $department->description;
+        $department_audit_trail->remarks = $department->remarks;
+        $department_audit_trail->updated_by = $user->id;
+        $department_audit_trail->action = 'create';
+        $department_audit_trail->date_and_time = Carbon::now();
+        /* disable time stamps */
+        $department_audit_trail->timestamps = false;
+        $department_audit_trail->save();
          
          return Response::json(['status' => 'Success', 'data' => $department], 200);
     }
@@ -109,17 +122,17 @@ class DepartmentController extends Controller
          $user  = User::find($user_id);
          $company_id = $user->company->id;
  
-          /* Get Department */
+          /* Get Record */
           $department  = Department::find($id);
  
           /* Check if Existing */
           if(!$department){
-              return Response::json(['status' => 'fail', 'data' => ["Department is not existing"] ], 404);
+              return Response::json(['status' => 'fail', 'data' => ["Record is not existing"] ], 404);
           }
  
           /* Check if company is same */
           if(!$department->company->id == $company_id){
-             return Response::json(['status' => 'fail', 'data' => ["This Department belongs to another Company"] ], 403);
+             return Response::json(['status' => 'fail', 'data' => ["This Record belongs to another Company"] ], 403);
           }
  
           $department->audit;
