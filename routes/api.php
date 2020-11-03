@@ -10,6 +10,7 @@ use App\Http\Controllers\API\DepartmentController;
 use App\Http\Controllers\API\PayGroupController;
 use App\Http\Controllers\API\TotalWorkDaysPerYearController;
 use App\Http\Controllers\API\TotalWorkMonthsPerYearController;
+use App\Http\Controllers\API\WHSStandardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,6 +96,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     /* Total Work Months Per YeaRoutes */
     Route::resource('/total_work_months_per_year', TotalWorkMonthsPerYearController::class)->only([
+        'index', 'store', 'show', 'update' , 'destroy'
+    ]);
+});
+
+/* WHS Standard */
+Route::middleware(['auth:sanctum'])->group(function () {
+    /* Total Work Months Per YeaRoutes */
+    Route::resource('/whs_standard', WHSStandardController::class)->only([
         'index', 'store', 'show', 'update' , 'destroy'
     ]);
 });

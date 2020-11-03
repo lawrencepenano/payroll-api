@@ -43,6 +43,11 @@ class Company extends Model
         return $this->hasMany('App\Models\TotalWorkMonthsPerYear','company_id','id');
     }
 
+    public function whs_standard()
+    {
+        return $this->hasMany('App\Models\WHSStandard','company_id','id');
+    }
+
     public function audit()
     {
         return $this->hasMany('App\Models\CompanyAuditTrail','company_id','id');

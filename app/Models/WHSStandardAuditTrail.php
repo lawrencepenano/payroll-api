@@ -9,7 +9,7 @@ class WHSStandardAuditTrail extends Model
 {
     use HasFactory;
     
-    protected $table = 'whs_standrds';
+    protected $table = 'whs_standard_audit_trails';
 
     public function whs_standard()
     {

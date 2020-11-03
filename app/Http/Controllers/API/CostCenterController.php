@@ -167,12 +167,12 @@ class CostCenterController extends Controller
         $user  = User::find($user_id);
         $company_id = $user->company->id;
 
-        /* Get Cost Center */
+        /* Get Record */
         $cost_center  = CostCenter::find($id);
 
         /* Check for if Existing */
         if(!$cost_center){
-            return Response::json(['status' => 'fail', 'data' => ["Cost Center is not existing"] ], 404);
+            return Response::json(['status' => 'fail', 'data' => ["Record is not existing"] ], 404);
         }
   
         /* Validate duplicate emails */
@@ -183,7 +183,7 @@ class CostCenterController extends Controller
 
         /* Check if company is same */
         if(!$cost_center->company->id == $company_id){
-            return Response::json(['status' => 'fail', 'data' => ["This Cost Center belongs to another company"] ], 403);
+            return Response::json(['status' => 'fail', 'data' => ["This Record belongs to another company"] ], 403);
         }
 
          /* Get Updater */
