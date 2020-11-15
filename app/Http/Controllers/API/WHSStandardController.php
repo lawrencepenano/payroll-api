@@ -40,11 +40,7 @@ class WHSStandardController extends Controller
         })
         /* Pagination */
         ->paginate($request->query('sizePerPage'));
-
-        $whs_standard->company;
-        $whs_standard->total_working_days_per_year;
-
-
+        
         return (new WHSStandardResource($whs_standard))->response()->setStatusCode(200);  
     }
     /**

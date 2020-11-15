@@ -36,6 +36,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
      /* Role */
      Route::get('/roles',[GlobalParameterController::class, 'getRoles']);
+     
+     /* Total Work Days */
+     Route::get('/totalWorkDays',[GlobalParameterController::class, 'getTotalWorkDays']);
+    
+    /* Total Work Months  */
+    Route::get('/totalWorkMonths',[GlobalParameterController::class, 'getTotalWorkMonths']);
 });
 
 /*  User  */
